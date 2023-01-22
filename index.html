@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form onsubmit="saveToLocalStorage(event)">
+      <label>chooseexpensamount:</label>
+      <input type="number" id="chooseexperiment" required />
+      <label>choosedescription</label>
+      <input type="text" id="choosedescription" required />
+      <label >chooseacategory</label>
+      <select id="chooseacategory"><option value="movies">
+        movies
+      </option>
+      <option value="fuel">
+        fuel
+      </option>
+      <option value="food">
+        food
+      </option>
+    </select> 
+      <button >AddExpense</button>
+    </form>
+    <ul id="listOfitems"></ul>
+    <script>
+      function saveToLocalStorage(event) {
+        event.preventDefault();
+        const chooseexperiment = event.target.chooseexperiment.value;
+        const choosedescription = event.target.choosedescription.value;
+        const chooseacategory = event.target.chooseacategory.value;
+        const obj = {
+          chooseexperiment ,
+          choosedescription,
+          chooseacategory,
+
+        };
+        console.log(obj);
+        localStorage.setItem(obj.choosedescription, JSON.stringify(obj));
+        showUserOnScreen(obj);
+      }
+      function showUserOnScreen(obj) {
+        const parentElem = document.getElementById("listOfitems");
+        parentElem.innerHTML =
+          parentElem.innerHTML +
+          `<li id="${obj.choosedescription}">${obj.chooseexperiment}-${obj.choosedescription}-${obj.chooseacategory}
+        <button onclick="deleteButton('${obj.choosedescription}')">delete</button>
+        <button onclick="editexpenses('${obj.choosedescription}')">Edit</button> </li>`
+        
+      }
+
+      function deleteButton(key) {
+          localStorage.removeItem(key);
+          const childNode = document.getElementById(`${key}`)
+          const parentNode = document.getElementById('listOfitems')
+          parentNode.removeChild(childNode);
+        };
+        
+function editexpenses(key) {
+  const obj = JSON.parse(localStorage.getItem(key));
+  console.log(obj.chooseexperiment)
+  const childNode=document.getElementById(`${key}`)
+  document.getElementById("chooseexperiment").value = obj.chooseexperiment;
+  document.getElementById("choosedescription").value = obj.choosedescription;
+  document.getElementById("chooseacategory").value = obj.chooseacategory;
+  const parentNode = document.getElementById('listOfitems')
+  parentNode.removeChild(childNode);
+ 
+}
+      
+      
+    </script>
+  </body>
+</html>
